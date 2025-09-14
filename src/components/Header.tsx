@@ -11,7 +11,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="bg-gradient-primary p-2 rounded-lg">
+            <div className="bg-primary p-2 rounded-lg">
               <BookOpen className="h-6 w-6 text-primary-foreground" />
             </div>
             <div>
@@ -39,7 +39,7 @@ const Header = () => {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <Button variant="ghost">Sign In</Button>
-            <Button variant="hero">Get Started</Button>
+            <Button variant="default" className="bg-primary hover:bg-primary/90">Get Started</Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -71,7 +71,7 @@ const Header = () => {
               </a>
               <div className="flex flex-col space-y-2 pt-4">
                 <Button variant="ghost">Sign In</Button>
-                <Button variant="hero">Get Started</Button>
+                <Button variant="default" className="bg-primary hover:bg-primary/90">Get Started</Button>
               </div>
             </div>
           </nav>

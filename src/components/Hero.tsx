@@ -29,7 +29,7 @@ const Hero = () => {
             <div className="space-y-4">
               <h1 className="text-4xl lg:text-6xl font-bold text-foreground leading-tight">
                 Your Career Path
-                <span className="bg-gradient-hero bg-clip-text text-transparent"> Starts Here</span>
+                <span className="text-primary"> Starts Here</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
                 Personalized guidance for students from Class 10 onwards to make informed academic 
@@ -60,11 +60,11 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="gradient" size="xl" className="group">
+              <Button variant="default" size="xl" className="group bg-primary hover:bg-primary/90">
                 Start Your Journey
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="outline" size="xl">
+              <Button variant="outline" size="xl" className="border-border hover:bg-card">
                 Learn More
               </Button>
             </div>

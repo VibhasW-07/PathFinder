@@ -9,7 +9,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="bg-gradient-primary p-2 rounded-lg">
+              <div className="bg-primary p-2 rounded-lg">
                 <BookOpen className="h-5 w-5 text-primary-foreground" />
               </div>
               <div>
@@ -111,7 +111,7 @@ const Footer = () => {
                   placeholder="Enter your email"
                   className="flex-1 px-3 py-2 text-xs bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
-                <Button size="sm" variant="hero">
+                <Button size="sm" variant="default" className="bg-primary hover:bg-primary/90">
                   Subscribe
                 </Button>
               </div>

@@ -52,7 +52,7 @@ const ProblemSolution = () => {
           <Badge variant="destructive" className="mb-4">The Problem</Badge>
           <h2 className="text-3xl lg:text-5xl font-bold text-foreground mb-6">
             The Education Crisis in
-            <span className="bg-gradient-hero bg-clip-text text-transparent"> Rural India</span>
+            <span className="text-primary"> Rural India</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Millions of students, especially in rural and semi-urban areas, face confusion and make 
@@ -137,7 +137,7 @@ const ProblemSolution = () => {
           </div>
 
           {/* Results */}
-          <div className="bg-gradient-primary text-primary-foreground rounded-2xl p-8">
+          <div className="bg-primary text-primary-foreground rounded-2xl p-8">
             <div className="text-center mb-8">
               <h4 className="text-2xl font-bold mb-4">Expected Impact with PathFinder</h4>
               <p className="text-primary-foreground/90 max-w-2xl mx-auto">

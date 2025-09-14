@@ -16,10 +16,10 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         // Beautiful variants using design system
-        hero: "bg-gradient-primary text-primary-foreground shadow-medium hover:shadow-strong transform hover:scale-105 transition-all duration-300 font-semibold",
+        hero: "bg-primary text-primary-foreground shadow-medium hover:bg-primary/90 transition-all duration-300 font-semibold",
         accent: "bg-accent text-accent-foreground hover:bg-accent/90 shadow-soft hover:shadow-medium transition-all duration-300",
         success: "bg-success text-white hover:bg-success/90 shadow-soft hover:shadow-medium",
-        gradient: "bg-gradient-hero text-white shadow-medium hover:shadow-strong transform hover:scale-105 transition-all duration-300 font-semibold",
+        gradient: "bg-gradient-hero text-primary-foreground shadow-medium hover:shadow-strong transform hover:scale-105 transition-all duration-300 font-semibold",
       },
       size: {
         default: "h-10 px-4 py-2",
