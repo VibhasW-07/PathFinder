@@ -2,57 +2,44 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, CheckCircle, ArrowRight, Users, School, Briefcase } from "lucide-react";
-
 const ProblemSolution = () => {
-  const problems = [
-    {
-      icon: School,
-      title: "Subject Stream Confusion",
-      description: "Students struggle to choose between Arts, Science, Commerce, or Vocational streams after Class 10.",
-      impact: "Leads to poor academic performance and career misalignment"
-    },
-    {
-      icon: Users,
-      title: "Lack of College Awareness",
-      description: "Limited knowledge about degree programs and admission processes in government colleges.",
-      impact: "Results in migration to expensive private institutions"
-    },
-    {
-      icon: Briefcase,
-      title: "Career Uncertainty",
-      description: "Unclear about job opportunities, higher studies, and skill-based vs traditional education.",
-      impact: "Causes dropouts and poor career decisions"
-    }
-  ];
-
-  const solutions = [
-    {
-      title: "Personalized Assessment",
-      description: "AI-powered tools analyze your interests, aptitude, and personality to recommend the best academic path."
-    },
-    {
-      title: "Comprehensive Database",
-      description: "Access detailed information about 1000+ government colleges, their programs, fees, and admission criteria."
-    },
-    {
-      title: "Career Roadmaps",
-      description: "Visual pathways showing how each subject connects to specific careers with salary expectations and growth prospects."
-    },
-    {
-      title: "Real-time Updates",
-      description: "Get notified about admission deadlines, scholarships, entrance exams, and job opportunities."
-    }
-  ];
-
-  return (
-    <section className="py-16 lg:py-24 bg-gradient-subtle">
+  const problems = [{
+    icon: School,
+    title: "Subject Stream Confusion",
+    description: "Students struggle to choose between Arts, Science, Commerce, or Vocational streams after Class 10.",
+    impact: "Leads to poor academic performance and career misalignment"
+  }, {
+    icon: Users,
+    title: "Lack of College Awareness",
+    description: "Limited knowledge about degree programs and admission processes in government colleges.",
+    impact: "Results in migration to expensive private institutions"
+  }, {
+    icon: Briefcase,
+    title: "Career Uncertainty",
+    description: "Unclear about job opportunities, higher studies, and skill-based vs traditional education.",
+    impact: "Causes dropouts and poor career decisions"
+  }];
+  const solutions = [{
+    title: "Personalized Assessment",
+    description: "AI-powered tools analyze your interests, aptitude, and personality to recommend the best academic path."
+  }, {
+    title: "Comprehensive Database",
+    description: "Access detailed information about 1000+ government colleges, their programs, fees, and admission criteria."
+  }, {
+    title: "Career Roadmaps",
+    description: "Visual pathways showing how each subject connects to specific careers with salary expectations and growth prospects."
+  }, {
+    title: "Real-time Updates",
+    description: "Get notified about admission deadlines, scholarships, entrance exams, and job opportunities."
+  }];
+  return <section className="py-16 lg:py-24 bg-gradient-subtle">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">
           <Badge variant="destructive" className="mb-4">The Problem</Badge>
           <h2 className="text-3xl lg:text-5xl font-bold text-foreground mb-6">
             The Education Crisis in
-            <span className="text-primary"> Rural India</span>
+            <span className="bg-gradient-hero bg-clip-text text-transparent"> Rural India</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Millions of students, especially in rural and semi-urban areas, face confusion and make 
@@ -68,13 +55,12 @@ const ProblemSolution = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {problems.map((problem) => (
-              <Card key={problem.title} className="border-destructive/20 hover:border-destructive/40 transition-colors">
+            {problems.map(problem => <Card key={problem.title} className="border-destructive/20 hover:border-destructive/40 transition-colors">
                 <CardHeader>
                   <div className="bg-destructive/10 p-3 rounded-xl w-fit">
                     <problem.icon className="h-6 w-6 text-destructive" />
                   </div>
-                  <CardTitle className="text-lg text-destructive">{problem.title}</CardTitle>
+                  <CardTitle className="text-lg font-semibold text-red-600">{problem.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <CardDescription className="text-base">
@@ -86,8 +72,7 @@ const ProblemSolution = () => {
                     </p>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
 
           {/* Statistics */}
@@ -117,8 +102,7 @@ const ProblemSolution = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {solutions.map((solution, index) => (
-              <Card key={solution.title} className="border-success/20 hover:border-success/40 transition-colors group">
+            {solutions.map((solution, index) => <Card key={solution.title} className="border-success/20 hover:border-success/40 transition-colors group">
                 <CardHeader>
                   <div className="flex items-center space-x-3">
                     <div className="bg-success/10 p-2 rounded-lg">
@@ -132,12 +116,11 @@ const ProblemSolution = () => {
                     {solution.description}
                   </CardDescription>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
 
           {/* Results */}
-          <div className="bg-primary text-primary-foreground rounded-2xl p-8">
+          <div className="bg-gradient-primary text-primary-foreground rounded-2xl p-8">
             <div className="text-center mb-8">
               <h4 className="text-2xl font-bold mb-4">Expected Impact with PathFinder</h4>
               <p className="text-primary-foreground/90 max-w-2xl mx-auto">
@@ -169,8 +152,6 @@ const ProblemSolution = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ProblemSolution;
