@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star, Users, TrendingUp } from "lucide-react";
-import heroImage from "@/assets/hero-education.jpg";
+import heroImage from "@/assets/hero-indian-student.jpg";
 
 const Hero = () => {
   return (
@@ -80,7 +80,7 @@ const Hero = () => {
             <div className="relative rounded-2xl overflow-hidden shadow-strong">
               <img
                 src={heroImage}
-                alt="Students exploring career guidance on digital platform"
+                alt="Indian student thoughtfully planning career decisions with laptop and books"
                 className="w-full h-[500px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
