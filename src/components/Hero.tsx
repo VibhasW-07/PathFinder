@@ -1,8 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star, Users, TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-indian-student.jpg";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const handleStartJourney = () => {
+    navigate('/auth');
+  };
+
   return (
     <section className="bg-gradient-subtle py-16 lg:py-24">
       <div className="container mx-auto px-4">
@@ -60,7 +67,12 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="default" size="xl" className="group bg-primary hover:bg-primary/90">
+              <Button 
+                variant="default" 
+                size="xl" 
+                className="group bg-primary hover:bg-primary/90"
+                onClick={handleStartJourney}
+              >
                 Start Your Journey
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>

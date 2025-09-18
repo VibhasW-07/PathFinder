@@ -1,9 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { BookOpen, Menu } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleAuthClick = () => {
+    navigate('/auth');
+  };
 
   return (
     <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
@@ -38,8 +44,8 @@ const Header = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost">Sign In</Button>
-            <Button variant="default" className="bg-primary hover:bg-primary/90">Get Started</Button>
+            <Button variant="ghost" onClick={handleAuthClick}>Sign In</Button>
+            <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleAuthClick}>Get Started</Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -70,8 +76,8 @@ const Header = () => {
                 Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4">
-                <Button variant="ghost">Sign In</Button>
-                <Button variant="default" className="bg-primary hover:bg-primary/90">Get Started</Button>
+                <Button variant="ghost" onClick={handleAuthClick}>Sign In</Button>
+                <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleAuthClick}>Get Started</Button>
               </div>
             </div>
           </nav>
