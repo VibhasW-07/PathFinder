@@ -1,11 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { BookOpen, Menu } from "lucide-react";
+import { BookOpen, Menu, User } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useProfile } from "@/hooks/useProfile";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { avatarDataUrl } = useProfile();
 
   const handleAuthClick = () => {
     navigate('/auth');
@@ -42,10 +46,25 @@ const Header = () => {
             </a>
           </nav>
 
-          {/* CTA Buttons */}
+          {/* CTA / User */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" onClick={handleAuthClick}>Sign In</Button>
-            <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleAuthClick}>Get Started</Button>
+            {user ? (
+              <>
+                <div className="h-8 w-8 rounded-full bg-muted overflow-hidden flex items-center justify-center">
+                  {avatarDataUrl ? (
+                    <img src={avatarDataUrl} alt="avatar" className="h-full w-full object-cover" />
+                  ) : (
+                    <User className="h-4 w-4 text-muted-foreground" />
+                  )}
+                </div>
+                <Button variant="outline" onClick={() => navigate('/dashboard')}>Dashboard</Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" onClick={handleAuthClick}>Sign In</Button>
+                <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleAuthClick}>Get Started</Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -76,8 +95,22 @@ const Header = () => {
                 Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4">
-                <Button variant="ghost" onClick={handleAuthClick}>Sign In</Button>
-                <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleAuthClick}>Get Started</Button>
+                {user ? (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <div className="h-8 w-8 rounded-full bg-muted overflow-hidden flex items-center justify-center">
+                        {avatarDataUrl ? <img src={avatarDataUrl} alt="avatar" className="h-full w-full object-cover" /> : <User className="h-4 w-4 text-muted-foreground" />}
+                      </div>
+                      <span className="text-sm text-muted-foreground">Signed in</span>
+                    </div>
+                    <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={() => navigate('/dashboard')}>Dashboard</Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="ghost" onClick={handleAuthClick}>Sign In</Button>
+                    <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleAuthClick}>Get Started</Button>
+                  </>
+                )}
               </div>
             </div>
           </nav>

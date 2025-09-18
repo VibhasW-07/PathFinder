@@ -14,7 +14,8 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { signUp, signIn, user, loading } = useAuth();
+  const [isResetting, setIsResetting] = useState(false);
+  const { signUp, signIn, resetPassword, user, loading } = useAuth();
 
   // Redirect if already authenticated
   if (!loading && user) {
@@ -41,6 +42,14 @@ const Auth = () => {
     setIsLoading(true);
     await signUp(email, password);
     setIsLoading(false);
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setIsResetting(true);
+    await resetPassword(email);
+    setIsResetting(false);
   };
 
   if (loading) {
@@ -117,6 +126,16 @@ const Auth = () => {
                         required
                         className="bg-background"
                       />
+                    </div>
+                    <div className="text-right">
+                      <button
+                        type="button"
+                        onClick={handleResetPassword}
+                        className="text-sm text-primary hover:underline"
+                        disabled={isResetting || !email}
+                      >
+                        {isResetting ? 'Sending reset link...' : 'Forgot password?'}
+                      </button>
                     </div>
                     <Button
                       type="submit"

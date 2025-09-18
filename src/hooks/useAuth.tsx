@@ -9,6 +9,8 @@ interface AuthContextType {
   session: Session | null;
   signUp: (email: string, password: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
+  resetPassword: (email: string) => Promise<{ error: any }>;
+  updatePassword: (newPassword: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   loading: boolean;
 }
@@ -41,6 +43,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setUser(session?.user ?? null);
         setLoading(false);
         
+        if (event === 'PASSWORD_RECOVERY') {
+          // Route user to password reset page when they open the recovery link
+          navigate('/reset-password');
+          return;
+        }
         if (event === 'SIGNED_IN') {
           navigate('/dashboard');
         }
@@ -104,6 +111,49 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return { error };
   };
 
+  const resetPassword = async (email: string) => {
+    const redirectUrl = `${window.location.origin}/reset-password`;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: redirectUrl,
+    });
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Reset failed",
+        description: error.message,
+      });
+    } else {
+      toast({
+        title: "Check your email",
+        description: "We sent a password reset link. It expires soon.",
+      });
+    }
+
+    return { error };
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Could not update password",
+        description: error.message,
+      });
+    } else {
+      toast({
+        title: "Password updated",
+        description: "Your password has been changed successfully.",
+      });
+    }
+
+    return { error };
+  };
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -120,6 +170,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     session,
     signUp,
     signIn,
+    resetPassword,
+    updatePassword,
     signOut,
     loading,
   };

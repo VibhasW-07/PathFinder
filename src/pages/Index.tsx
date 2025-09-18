@@ -4,8 +4,13 @@ import Hero from "@/components/Hero";
 import ProblemSolution from "@/components/ProblemSolution";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Helmet>
@@ -40,6 +45,29 @@ const Index = () => {
           <Hero />
           <ProblemSolution />
           <Features />
+          <section id="overview" className="container mx-auto px-4 py-12 space-y-8">
+            <h2 className="text-2xl font-bold">Explore PathFinder</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="bg-card border-border shadow-medium">
+                <CardHeader>
+                  <CardTitle>Colleges</CardTitle>
+                  <CardDescription>Find and compare colleges for your field.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-end">
+                  <Button variant="outline" onClick={() => navigate('/dashboard')}>Explore</Button>
+                </CardContent>
+              </Card>
+              <Card className="bg-card border-border shadow-medium">
+                <CardHeader>
+                  <CardTitle>Course Recommendations</CardTitle>
+                  <CardDescription>See courses tailored to your profile and interests.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-end">
+                  <Button variant="outline" onClick={() => navigate('/courses')}>View Courses</Button>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
         </main>
         <Footer />
       </div>
