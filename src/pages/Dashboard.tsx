@@ -1,14 +1,14 @@
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, LogOut, User, TrendingUp, GraduationCap, MapPin, Bell, Home, Globe } from 'lucide-react';
+import { BookOpen, LogOut, User, TrendingUp, GraduationCap, MapPin, Bell, Home, Globe, Award } from 'lucide-react';
 import { useProfile } from '@/hooks/useProfile';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useMemo, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { generateCollegeSuggestions, generateCourseRecommendations } from '@/lib/utils';
+import { generateCollegeSuggestions, generateCourseRecommendations, generateScholarshipRecommendations, type Scholarship } from '@/lib/utils';
 
 const Dashboard = () => {
   const { user, signOut, loading } = useAuth();
@@ -24,6 +24,8 @@ const Dashboard = () => {
   const [openMapKey, setOpenMapKey] = useState<string | null>(null);
   const [courses, setCourses] = useState<Array<{ id: string; title: string; shortDescription: string; level: string; duration: string; provider: string; matchScore: number; category: string; mode: string }>>([]);
   const [courseLoading, setCourseLoading] = useState(true);
+  const [scholarships, setScholarships] = useState<Scholarship[]>([]);
+  const [scholarshipLoading, setScholarshipLoading] = useState(true);
 
   const onAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -65,6 +67,20 @@ const Dashboard = () => {
       if (active) {
         setCourses(res.courses);
         setCourseLoading(false);
+      }
+    })();
+    return () => { active = false; };
+  });
+
+  // Fetch scholarship recommendations when profile changes
+  useState(() => {
+    let active = true;
+    (async () => {
+      setScholarshipLoading(true);
+      const res = await generateScholarshipRecommendations(profile as any);
+      if (active) {
+        setScholarships(res.scholarships);
+        setScholarshipLoading(false);
       }
     })();
     return () => { active = false; };
@@ -317,6 +333,50 @@ const Dashboard = () => {
                       <div className="flex justify-end pt-2">
                         <Button variant="outline" onClick={() => navigate('/courses')}>
                           Explore All Courses
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Scholarship Opportunities */}
+              <Card className="bg-card border-border shadow-medium animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <CardHeader>
+                  <CardTitle className="text-xl font-semibold text-foreground flex items-center gap-2">
+                    <Award className="h-5 w-5" />
+                    Scholarship Opportunities
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Personalized scholarships based on your profile and background.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="p-3 bg-muted rounded-lg text-xs text-muted-foreground">
+                    {profile.currentClass && <div>Level: {profile.currentClass}</div>}
+                    {(profile.fieldOfStudy || profile.stream) && <div>Field: {profile.fieldOfStudy}{profile.stream ? ` • ${profile.stream}` : ''}</div>}
+                    {(profile.state || profile.category) && <div>{profile.state ? `Location: ${profile.state}` : ''}{profile.state && profile.category ? ' • ' : ''}{profile.category ? `Category: ${profile.category}` : ''}</div>}
+                  </div>
+                  {scholarshipLoading ? (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="h-5 w-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                      Finding scholarships…
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {scholarships.slice(0, 3).map((s) => (
+                        <div key={s.id} className="p-3 rounded-lg border hover:shadow-sm transition-shadow">
+                          <div className="flex justify-between items-start mb-1">
+                            <div className="font-medium">{s.name}</div>
+                            <div className="text-sm text-primary font-semibold">{s.matchScore}% match</div>
+                          </div>
+                          <div className="text-xs text-muted-foreground mb-2">{s.provider}</div>
+                          <div className="text-sm text-muted-foreground line-clamp-2">{s.eligibilitySummary}</div>
+                        </div>
+                      ))}
+                      <div className="flex justify-end pt-2">
+                        <Button variant="outline" onClick={() => navigate('/scholarships')}>
+                          View All Scholarships
                         </Button>
                       </div>
                     </div>

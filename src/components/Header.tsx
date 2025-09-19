@@ -1,68 +1,132 @@
 import { Button } from "@/components/ui/button";
-import { BookOpen, Menu, User } from "lucide-react";
-import { useState } from "react";
+import { BookOpen, Menu, User, X } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
   const navigate = useNavigate();
   const { user } = useAuth();
   const { avatarDataUrl } = useProfile();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['features', 'how-it-works', 'about', 'contact'];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleAuthClick = () => {
     navigate('/auth');
   };
 
+  const handleNavClick = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setIsMenuOpen(false);
+  };
+
   return (
-    <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
+    <header className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="bg-primary p-2 rounded-lg">
-              <BookOpen className="h-6 w-6 text-primary-foreground" />
+          <div className="flex items-center space-x-3">
+            <div className="bg-gradient-to-br from-blue-600 to-purple-600 p-2 rounded-xl shadow-lg">
+              <BookOpen className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">PathFinder</h1>
-              <p className="text-xs text-muted-foreground">Career Guidance Platform</p>
+              <h1 className="text-xl font-bold text-gray-900">PathFinder</h1>
+              <p className="text-xs text-gray-600">Career Guidance Platform</p>
             </div>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-foreground hover:text-primary transition-colors">
+            <button 
+              onClick={() => handleNavClick('features')}
+              className={`text-sm font-medium transition-all duration-300 hover:text-blue-600 ${
+                activeSection === 'features' ? 'text-blue-600' : 'text-gray-700'
+              }`}
+            >
               Features
-            </a>
-            <a href="#how-it-works" className="text-foreground hover:text-primary transition-colors">
+            </button>
+            <button 
+              onClick={() => handleNavClick('how-it-works')}
+              className={`text-sm font-medium transition-all duration-300 hover:text-blue-600 ${
+                activeSection === 'how-it-works' ? 'text-blue-600' : 'text-gray-700'
+              }`}
+            >
               How It Works
-            </a>
-            <a href="#about" className="text-foreground hover:text-primary transition-colors">
+            </button>
+            <button 
+              onClick={() => handleNavClick('about')}
+              className={`text-sm font-medium transition-all duration-300 hover:text-blue-600 ${
+                activeSection === 'about' ? 'text-blue-600' : 'text-gray-700'
+              }`}
+            >
               About
-            </a>
-            <a href="#contact" className="text-foreground hover:text-primary transition-colors">
+            </button>
+            <button 
+              onClick={() => handleNavClick('contact')}
+              className={`text-sm font-medium transition-all duration-300 hover:text-blue-600 ${
+                activeSection === 'contact' ? 'text-blue-600' : 'text-gray-700'
+              }`}
+            >
               Contact
-            </a>
+            </button>
           </nav>
 
           {/* CTA / User */}
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <>
-                <div className="h-8 w-8 rounded-full bg-muted overflow-hidden flex items-center justify-center">
+                <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
                   {avatarDataUrl ? (
                     <img src={avatarDataUrl} alt="avatar" className="h-full w-full object-cover" />
                   ) : (
-                    <User className="h-4 w-4 text-muted-foreground" />
+                    <User className="h-4 w-4 text-gray-600" />
                   )}
                 </div>
-                <Button variant="outline" onClick={() => navigate('/dashboard')}>Dashboard</Button>
+                <Button 
+                  variant="outline" 
+                  className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                  onClick={() => navigate('/dashboard')}
+                >
+                  Dashboard
+                </Button>
               </>
             ) : (
               <>
-                <Button variant="ghost" onClick={handleAuthClick}>Sign In</Button>
-                <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleAuthClick}>Get Started</Button>
+                <Button variant="ghost" onClick={handleAuthClick} className="text-gray-700 hover:text-blue-600">
+                  Sign In
+                </Button>
+                <Button 
+                  variant="default" 
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  onClick={handleAuthClick}
+                >
+                  Get Started
+                </Button>
               </>
             )}
           </div>
@@ -71,44 +135,78 @@ const Header = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="md:hidden text-gray-700 hover:text-blue-600"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <Menu className="h-5 w-5" />
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 border-t border-border pt-4">
+          <nav className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4 animate-slide-in-up">
             <div className="flex flex-col space-y-4">
-              <a href="#features" className="text-foreground hover:text-primary transition-colors">
+              <button 
+                onClick={() => handleNavClick('features')}
+                className={`text-left text-sm font-medium transition-colors ${
+                  activeSection === 'features' ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+                }`}
+              >
                 Features
-              </a>
-              <a href="#how-it-works" className="text-foreground hover:text-primary transition-colors">
+              </button>
+              <button 
+                onClick={() => handleNavClick('how-it-works')}
+                className={`text-left text-sm font-medium transition-colors ${
+                  activeSection === 'how-it-works' ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+                }`}
+              >
                 How It Works
-              </a>
-              <a href="#about" className="text-foreground hover:text-primary transition-colors">
+              </button>
+              <button 
+                onClick={() => handleNavClick('about')}
+                className={`text-left text-sm font-medium transition-colors ${
+                  activeSection === 'about' ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+                }`}
+              >
                 About
-              </a>
-              <a href="#contact" className="text-foreground hover:text-primary transition-colors">
+              </button>
+              <button 
+                onClick={() => handleNavClick('contact')}
+                className={`text-left text-sm font-medium transition-colors ${
+                  activeSection === 'contact' ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+                }`}
+              >
                 Contact
-              </a>
-              <div className="flex flex-col space-y-2 pt-4">
+              </button>
+              <div className="flex flex-col space-y-3 pt-4 border-t border-gray-200">
                 {user ? (
                   <>
-                    <div className="flex items-center gap-2">
-                      <div className="h-8 w-8 rounded-full bg-muted overflow-hidden flex items-center justify-center">
-                        {avatarDataUrl ? <img src={avatarDataUrl} alt="avatar" className="h-full w-full object-cover" /> : <User className="h-4 w-4 text-muted-foreground" />}
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
+                        {avatarDataUrl ? <img src={avatarDataUrl} alt="avatar" className="h-full w-full object-cover" /> : <User className="h-4 w-4 text-gray-600" />}
                       </div>
-                      <span className="text-sm text-muted-foreground">Signed in</span>
+                      <span className="text-sm text-gray-600">Signed in</span>
                     </div>
-                    <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={() => navigate('/dashboard')}>Dashboard</Button>
+                    <Button 
+                      variant="default" 
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                      onClick={() => navigate('/dashboard')}
+                    >
+                      Dashboard
+                    </Button>
                   </>
                 ) : (
                   <>
-                    <Button variant="ghost" onClick={handleAuthClick}>Sign In</Button>
-                    <Button variant="default" className="bg-primary hover:bg-primary/90" onClick={handleAuthClick}>Get Started</Button>
+                    <Button variant="ghost" onClick={handleAuthClick} className="text-gray-700 hover:text-blue-600">
+                      Sign In
+                    </Button>
+                    <Button 
+                      variant="default" 
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                      onClick={handleAuthClick}
+                    >
+                      Get Started
+                    </Button>
                   </>
                 )}
               </div>

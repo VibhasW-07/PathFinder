@@ -49,7 +49,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           return;
         }
         if (event === 'SIGNED_IN') {
-          navigate('/dashboard');
+          // Only redirect to dashboard if user was on auth page, otherwise stay on current page
+          if (window.location.pathname === '/auth') {
+            navigate('/dashboard');
+          }
         }
         if (event === 'SIGNED_OUT') {
           navigate('/');

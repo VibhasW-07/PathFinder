@@ -6,11 +6,14 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useProfile } from '@/hooks/useProfile';
 import { generateCourseRecommendations } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { db } from '@/integrations/supabase/client';
 
 type Course = { id: string; title: string; shortDescription: string; level: string; duration: string; provider: string; matchScore: number; category: string; mode: string };
 
 const Courses = () => {
   const { profile } = useProfile();
+  const { user } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -143,7 +146,7 @@ const Courses = () => {
                       <span className="px-2 py-1 bg-muted text-muted-foreground rounded-full text-xs">{c.mode}</span>
                     </div>
                     <div className="flex justify-end">
-                      <Button variant="outline">View details</Button>
+                      <Button variant="outline" onClick={() => user && db.trackCourseInteraction({ user_id: user.id, course_id: c.id, interaction_type: 'view' })}>View details</Button>
                     </div>
                   </CardContent>
                 </Card>

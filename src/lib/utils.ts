@@ -290,3 +290,120 @@ export async function generateCollegeSuggestions(profile: {
   } catch {}
   return fallback;
 }
+
+export type Scholarship = {
+  id: string;
+  name: string;
+  provider: string;
+  eligibilitySummary: string;
+  amount: string;
+  deadline: string;
+  applyUrl: string;
+  fields?: string[];
+  categories?: string[]; // e.g., SC/ST/OBC/EWS/PwD/Women/Minority
+  locations?: string[]; // states or India-wide
+  academicMin?: string; // e.g., ">= 80% in Class 12"
+  incomeCap?: string; // e.g., "<= ₹8LPA"
+  matchScore: number;
+};
+
+export async function generateScholarshipRecommendations(profile: {
+  name?: string;
+  age?: number | string;
+  state?: string;
+  city?: string;
+  currentClass?: string;
+  fieldOfStudy?: string;
+  stream?: string;
+  futureInterest?: string;
+  academicPerformance?: string;
+  lastExamPercentage?: number;
+  annualFamilyIncome?: number | string;
+  category?: string;
+  achievements?: string;
+  aspirations?: string;
+}): Promise<{ scholarships: Scholarship[] }> {
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
+
+  const fallback: { scholarships: Scholarship[] } = {
+    scholarships: [
+      {
+        id: 's1',
+        name: 'National Means-cum-Merit Scholarship',
+        provider: 'Government of India',
+        eligibilitySummary: 'For meritorious Class 9–12 students from economically weaker sections',
+        amount: '₹12,000 per annum',
+        deadline: '31 Dec 2025',
+        applyUrl: 'https://scholarships.gov.in/',
+        categories: ['EWS'],
+        locations: ['India'],
+        academicMin: 'As per scheme guidelines',
+        incomeCap: '<= ₹3.5 LPA',
+        matchScore: 85,
+      },
+      {
+        id: 's2',
+        name: 'Post Matric Scholarship for SC Students',
+        provider: 'Ministry of Social Justice & Empowerment',
+        eligibilitySummary: 'SC category students pursuing post-matric/post-secondary courses',
+        amount: 'Tuition + maintenance (as per norms)',
+        deadline: '30 Nov 2025',
+        applyUrl: 'https://scholarships.gov.in/',
+        categories: ['SC'],
+        locations: ['India'],
+        matchScore: 90,
+      },
+      {
+        id: 's3',
+        name: 'INSPIRE Scholarship (SHE)',
+        provider: 'Department of Science & Technology',
+        eligibilitySummary: 'Top 1% Class 12 Science or KVPY/JEE/NEET rankers pursuing BSc/Int. MSc',
+        amount: '₹80,000 per year',
+        deadline: 'Tentative: Oct–Dec 2025',
+        applyUrl: 'https://online-inspire.gov.in/',
+        fields: ['Science'],
+        categories: ['General', 'EWS', 'OBC', 'SC', 'ST'],
+        matchScore: 78,
+      },
+      {
+        id: 's4',
+        name: 'AICTE Pragati Scholarship for Girls',
+        provider: 'AICTE',
+        eligibilitySummary: 'Girl students admitted in AICTE approved institutions (UG/Diploma)',
+        amount: '₹50,000 per year',
+        deadline: 'As per portal',
+        applyUrl: 'https://scholarships.gov.in/',
+        categories: ['Women'],
+        fields: ['Engineering', 'Technology'],
+        matchScore: 82,
+      },
+    ],
+  };
+
+  if (!apiKey) return fallback;
+
+  const prompt = `ROLE: Recommend relevant scholarships for the student in India based on profile.
+OUTPUT: Strict JSON: { "scholarships": [ { "id": string, "name": string, "provider": string, "eligibilitySummary": string, "amount": string, "deadline": string, "applyUrl": string, "fields"?: string[], "categories"?: string[], "locations"?: string[], "academicMin"?: string, "incomeCap"?: string, "matchScore": number } ] }
+COUNT: 6–10 scholarships spanning national, state, category, and field-specific.
+SCORING: matchScore 0–100 using academic level, field/stream, location, category, income, aspirations, achievements.
+PROFILE:\n${JSON.stringify(profile, null, 2)}\n`;
+
+  const body = {
+    contents: [ { role: 'user', parts: [{ text: prompt }] } ],
+    generationConfig: { temperature: 0.6, maxOutputTokens: 1024 }
+  };
+
+  try {
+    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    if (!resp.ok) return fallback;
+    const data = await resp.json();
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    const candidate = jsonMatch ? jsonMatch[0] : text;
+    const parsed = JSON.parse(candidate);
+    if (Array.isArray(parsed?.scholarships) && parsed.scholarships.length) return parsed;
+  } catch {}
+  return fallback;
+}

@@ -14,7 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      users: {
+        Row: { user_id: string; email: string; created_at: string | null; last_login: string | null }
+        Insert: { user_id: string; email: string; created_at?: string | null; last_login?: string | null }
+        Update: { user_id?: string; email?: string; created_at?: string | null; last_login?: string | null }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: { profile_id: string; user_id: string; academic_level: string | null; stream: string | null; subjects: Json | null; location: Json | null; career_goals: string | null; preferences: Json | null; assessment_completed_at: string | null; last_updated: string | null }
+        Insert: { profile_id?: string; user_id: string; academic_level?: string | null; stream?: string | null; subjects?: Json | null; location?: Json | null; career_goals?: string | null; preferences?: Json | null; assessment_completed_at?: string | null; last_updated?: string | null }
+        Update: { profile_id?: string; user_id?: string; academic_level?: string | null; stream?: string | null; subjects?: Json | null; location?: Json | null; career_goals?: string | null; preferences?: Json | null; assessment_completed_at?: string | null; last_updated?: string | null }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_user_id_fkey",
+            columns: ["user_id"],
+            isOneToOne: false,
+            referencedRelation: "users",
+            referencedColumns: ["user_id"]
+          }
+        ]
+      }
+      assessment_history: {
+        Row: { assessment_id: string; user_id: string; assessment_data: Json; completed_at: string; version: number }
+        Insert: { assessment_id?: string; user_id: string; assessment_data: Json; completed_at?: string; version?: number }
+        Update: { assessment_id?: string; user_id?: string; assessment_data?: Json; completed_at?: string; version?: number }
+        Relationships: []
+      }
+      course_interactions: {
+        Row: { interaction_id: string; user_id: string; course_id: string; interaction_type: string; timestamp: string }
+        Insert: { interaction_id?: string; user_id: string; course_id: string; interaction_type: string; timestamp?: string }
+        Update: { interaction_id?: string; user_id?: string; course_id?: string; interaction_type?: string; timestamp?: string }
+        Relationships: []
+      }
+      scholarship_tracking: {
+        Row: { tracking_id: string; user_id: string; scholarship_id: string; application_status: string | null; applied_at: string | null }
+        Insert: { tracking_id?: string; user_id: string; scholarship_id: string; application_status?: string | null; applied_at?: string | null }
+        Update: { tracking_id?: string; user_id?: string; scholarship_id?: string; application_status?: string | null; applied_at?: string | null }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

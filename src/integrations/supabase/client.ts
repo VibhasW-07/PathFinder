@@ -15,3 +15,36 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     autoRefreshToken: true,
   }
 });
+
+export const db = {
+  // Users
+  async upsertUser(user: { user_id: string; email: string; last_login?: string | null }) {
+    return supabase.from('users').upsert({ user_id: user.user_id, email: user.email, last_login: user.last_login ?? new Date().toISOString() });
+  },
+
+  // Profile
+  async getProfile(user_id: string) {
+    return supabase.from('user_profiles').select('*').eq('user_id', user_id).maybeSingle();
+  },
+  async upsertProfile(row: Partial<Database['public']['Tables']['user_profiles']['Row']>) {
+    return supabase.from('user_profiles').upsert({ ...row, last_updated: new Date().toISOString() });
+  },
+
+  // Assessment history
+  async insertAssessment(entry: { user_id: string; assessment_data: any; version?: number }) {
+    return supabase.from('assessment_history').insert({ user_id: entry.user_id, assessment_data: entry.assessment_data, version: entry.version ?? 1, completed_at: new Date().toISOString() });
+  },
+  async listAssessments(user_id: string) {
+    return supabase.from('assessment_history').select('*').eq('user_id', user_id).order('completed_at', { ascending: false });
+  },
+
+  // Course interactions
+  async trackCourseInteraction(entry: { user_id: string; course_id: string; interaction_type: string }) {
+    return supabase.from('course_interactions').insert({ ...entry, timestamp: new Date().toISOString() });
+  },
+
+  // Scholarship tracking
+  async trackScholarship(entry: { user_id: string; scholarship_id: string; application_status?: string | null }) {
+    return supabase.from('scholarship_tracking').upsert({ tracking_id: `${entry.user_id}-${entry.scholarship_id}`, user_id: entry.user_id, scholarship_id: entry.scholarship_id, application_status: entry.application_status ?? 'clicked', applied_at: new Date().toISOString() });
+  },
+};

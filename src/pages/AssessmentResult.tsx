@@ -4,11 +4,14 @@ import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useProfile } from '@/hooks/useProfile';
+import { useAuth } from '@/hooks/useAuth';
+import { db } from '@/integrations/supabase/client';
 
 const AssessmentResult = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { setProfile } = useProfile();
+  const { user } = useAuth();
   const score = location.state?.score ?? 0;
   const total = location.state?.total ?? 0;
 
@@ -20,6 +23,14 @@ const AssessmentResult = () => {
       assessmentScore: score,
       assessmentTotal: total
     }));
+    // Persist assessment history
+    (async () => {
+      try {
+        if (user) {
+          await db.insertAssessment({ user_id: user.id, assessment_data: { score, total }, version: 1 });
+        }
+      } catch {}
+    })();
   }, [score, total, setProfile]);
 
   return (

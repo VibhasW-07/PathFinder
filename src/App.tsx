@@ -17,6 +17,7 @@ import AssessmentTest from "./pages/AssessmentTest";
 import AssessmentResult from "./pages/AssessmentResult";
 import Courses from "./pages/Courses";
 import Profile from "./pages/Profile";
+import Scholarships from "./pages/Scholarships";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,11 @@ const App = () => (
               <Route path="/courses" element={
                 <ProtectedRoute>
                   <Courses />
+                </ProtectedRoute>
+              } />
+              <Route path="/scholarships" element={
+                <ProtectedRoute>
+                  <Scholarships />
                 </ProtectedRoute>
               } />
               <Route path="/profile" element={
