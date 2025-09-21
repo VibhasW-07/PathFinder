@@ -20,8 +20,9 @@ export async function generateAssessmentQuestions(payload: {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
   if (!apiKey) {
     // Graceful fallback: return a static sample if key missing
+    console.warn('[generateAssessmentQuestions] VITE_GEMINI_API_KEY is missing. Returning sample questions (developer fallback).');
     return {
-      questions: Array.from({ length: 10 }).map((_, i) => ({
+      questions: Array.from({ length: 12 }).map((_, i) => ({
         id: `sample-${i + 1}`,
         question: `Sample question ${i + 1}: Which option best fits you?`,
         options: ["Option A", "Option B", "Option C", "Option D"],
@@ -91,6 +92,7 @@ TAILORING GUIDE:
         20000
       );
       if (!resp.ok) {
+        console.warn(`[generateAssessmentQuestions] Model ${model} responded with status ${resp.status}. Trying next model...`);
         continue;
       }
       const data = await resp.json();
@@ -102,6 +104,7 @@ TAILORING GUIDE:
         if (Array.isArray(parsed?.questions) && parsed.questions.length > 0) {
           // Ensure exactly 12 questions if model returned a different count
           const trimmed = parsed.questions.slice(0, 12);
+          console.info(`[generateAssessmentQuestions] Questions generated via Gemini (${model}). Count: ${trimmed.length}`);
           return { questions: trimmed };
         }
       } catch {}
@@ -111,6 +114,7 @@ TAILORING GUIDE:
   }
 
   // Fallback if parsing fails
+  console.warn('[generateAssessmentQuestions] Failed to parse API response from all models. Returning local fallback questions.');
   return {
     questions: Array.from({ length: 12 }).map((_, i) => ({
       id: `fallback-${i + 1}`,

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { BookOpen, Menu, User, X } from "lucide-react";
+import { BookOpen, Menu, User, X, LogOut } from "lucide-react";
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,8 +10,9 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { avatarDataUrl } = useProfile();
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,8 +51,13 @@ const Header = () => {
     <header className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center space-x-3">
+          {/* Logo (clickable to go Home) */}
+          <div
+            className="flex items-center space-x-3 cursor-pointer select-none"
+            onClick={() => navigate('/')}
+            role="button"
+            aria-label="Go to home"
+          >
             <div className="bg-gradient-to-br from-blue-600 to-purple-600 p-2 rounded-xl shadow-lg">
               <BookOpen className="h-6 w-6 text-white" />
             </div>
@@ -100,16 +107,38 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <>
-                <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
-                  {avatarDataUrl ? (
-                    <img src={avatarDataUrl} alt="avatar" className="h-full w-full object-cover" />
-                  ) : (
-                    <User className="h-4 w-4 text-gray-600" />
+                <div className="relative">
+                  <button
+                    className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center border border-gray-300 hover:shadow-sm"
+                    onClick={() => setShowUserMenu((v) => !v)}
+                    aria-haspopup="menu"
+                    aria-expanded={showUserMenu}
+                  >
+                    {avatarDataUrl ? (
+                      <img src={avatarDataUrl} alt="avatar" className="h-full w-full object-cover" />
+                    ) : (
+                      <User className="h-4 w-4 text-gray-600" />
+                    )}
+                  </button>
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 bg-white shadow-xl z-50">
+                      <div className="p-3 border-b border-gray-200">
+                        <div className="text-xs text-gray-500">Signed in as</div>
+                        <div className="text-sm font-medium text-gray-900 break-all">{user?.email}</div>
+                      </div>
+                      <button
+                        className="w-full flex items-center gap-2 px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50"
+                        onClick={() => { setShowUserMenu(false); signOut(); }}
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Logout
+                      </button>
+                    </div>
                   )}
                 </div>
                 <Button 
-                  variant="outline" 
-                  className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                  variant="default" 
+                  className="bg-black text-white hover:bg-black/90"
                   onClick={() => navigate('/dashboard')}
                 >
                   Dashboard
@@ -189,7 +218,7 @@ const Header = () => {
                     </div>
                     <Button 
                       variant="default" 
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                      className="bg-black text-white hover:bg-black/90"
                       onClick={() => navigate('/dashboard')}
                     >
                       Dashboard

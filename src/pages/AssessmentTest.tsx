@@ -12,6 +12,11 @@ const AssessmentTest = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const questions = useMemo<Question[]>(() => location.state?.questions ?? [], [location.state]);
+  const source = useMemo(() => {
+    // Heuristic: our fallback/sample generators prefix ids with 'fallback-' or 'sample-'
+    const isFallback = questions.some(q => q.id?.startsWith('fallback-') || q.id?.startsWith('sample-'));
+    return isFallback ? 'Local fallback' : 'Gemini API';
+  }, [questions]);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -47,7 +52,10 @@ const AssessmentTest = () => {
           <Card className="bg-card border-border shadow-medium">
             <CardHeader>
               <CardTitle className="text-2xl">Your Personalized Test</CardTitle>
-              <CardDescription>Answer the following questions. There are {questions.length} questions.</CardDescription>
+              <CardDescription>
+                Answer the following questions. There are {questions.length} questions.
+                <span className="ml-2 text-xs text-muted-foreground">(Source: {source})</span>
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <form className="space-y-6" onSubmit={onSubmit}>
@@ -83,5 +91,3 @@ const AssessmentTest = () => {
 };
 
 export default AssessmentTest;
-
-

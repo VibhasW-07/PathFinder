@@ -18,6 +18,8 @@ import AssessmentResult from "./pages/AssessmentResult";
 import Courses from "./pages/Courses";
 import Profile from "./pages/Profile";
 import Scholarships from "./pages/Scholarships";
+import ChatBot from "./pages/ChatBot";
+import ChatLauncher from "./components/ChatLauncher";
 
 const queryClient = new QueryClient();
 
@@ -69,9 +71,11 @@ const App = () => (
                   <Profile />
                 </ProtectedRoute>
               } />
+              <Route path="/chat" element={<ChatBot />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
               </Routes>
+              <ChatLauncher />
             </ProfileProvider>
           </AuthProvider>
         </BrowserRouter>

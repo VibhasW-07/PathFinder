@@ -113,9 +113,9 @@ const Hero = () => {
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button 
-                variant="outline" 
+                variant="default" 
                 size="xl" 
-                className="border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-700 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                className="bg-black text-white hover:bg-black/90 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                 onClick={handleLearnMore}
               >
                 Learn More
@@ -154,39 +154,6 @@ const Hero = () => {
                 <div className="text-center">
                   <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">1000+</div>
                   <div className="text-sm text-gray-600 font-medium">Colleges</div>
-                </div>
-              </div>
-
-              {/* Progress Ring */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32">
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    stroke="currentColor"
-                    strokeWidth="8"
-                    fill="none"
-                    className="text-gray-200"
-                  />
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    stroke="currentColor"
-                    strokeWidth="8"
-                    fill="none"
-                    strokeDasharray="251.2"
-                    strokeDashoffset="62.8"
-                    className="text-blue-500 animate-pulse"
-                    style={{
-                      strokeDasharray: 251.2,
-                      strokeDashoffset: 62.8,
-                    }}
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-lg font-bold text-blue-600">75%</span>
                 </div>
               </div>
             </div>
