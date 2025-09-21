@@ -125,6 +125,13 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
   }
+
+  /* Ensure readability when components explicitly use a white background */
+  input.bg-white,
+  textarea.bg-white,
+  select.bg-white {
+    @apply text-gray-900 placeholder:text-gray-500;
+  }
 }
 
 /* Custom 3D Animations */

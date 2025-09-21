@@ -276,20 +276,20 @@ const Dashboard = () => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Name</Label>
-                      <Input value={profile.name || ''} onChange={(e) => setProfile({ ...profile, name: e.target.value })} className="bg-white" />
+                      <Label className="text-gray-700">Name</Label>
+                      <Input value={profile.name || ''} onChange={(e) => setProfile({ ...profile, name: e.target.value })} className="bg-white text-gray-900 placeholder:text-gray-500" />
                     </div>
                     <div className="space-y-2">
-                      <Label>Age</Label>
-                      <Input value={profile.age?.toString() || ''} onChange={(e) => setProfile({ ...profile, age: e.target.value })} className="bg-white" />
+                      <Label className="text-gray-700">Age</Label>
+                      <Input value={profile.age?.toString() || ''} onChange={(e) => setProfile({ ...profile, age: e.target.value })} className="bg-white text-gray-900 placeholder:text-gray-500" />
                     </div>
                     <div className="space-y-2">
-                      <Label>Class / Year</Label>
-                      <Input value={profile.currentClass || ''} onChange={(e) => setProfile({ ...profile, currentClass: e.target.value })} className="bg-white" />
+                      <Label className="text-gray-700">Class / Year</Label>
+                      <Input value={profile.currentClass || ''} onChange={(e) => setProfile({ ...profile, currentClass: e.target.value })} className="bg-white text-gray-900 placeholder:text-gray-500" />
                     </div>
                     <div className="space-y-2">
-                      <Label>Field of Study</Label>
-                      <Input value={profile.fieldOfStudy || ''} onChange={(e) => setProfile({ ...profile, fieldOfStudy: e.target.value })} className="bg-white" />
+                      <Label className="text-gray-700">Field of Study</Label>
+                      <Input value={profile.fieldOfStudy || ''} onChange={(e) => setProfile({ ...profile, fieldOfStudy: e.target.value })} className="bg-white text-gray-900 placeholder:text-gray-500" />
                     </div>
                   </div>
                   <div className="flex justify-end">
@@ -332,7 +332,7 @@ const Dashboard = () => {
                       {courses.slice(0, 3).map((course, i) => (
                         <div key={course.id} className="p-3 rounded-lg border border-gray-200 hover:shadow-md transition-shadow bg-white">
                           <div className="flex justify-between items-start mb-2">
-                            <div className="font-medium">{course.title}</div>
+                            <div className="font-medium text-gray-900">{course.title}</div>
                             <div className="text-sm text-blue-600 font-semibold">
                               {course.matchScore}% match
                             </div>
@@ -384,7 +384,7 @@ const Dashboard = () => {
                       {scholarships.slice(0, 3).map((s) => (
                         <div key={s.id} className="p-3 rounded-lg border border-gray-200 hover:shadow-md transition-shadow bg-white">
                           <div className="flex justify-between items-start mb-1">
-                            <div className="font-medium">{s.name}</div>
+                            <div className="font-medium text-gray-900">{s.name}</div>
                             <div className="text-sm text-blue-600 font-semibold">{s.matchScore}% match</div>
                           </div>
                           <div className="text-xs text-gray-500 mb-2">{s.provider}</div>
@@ -433,7 +433,7 @@ const Dashboard = () => {
                         <div className="space-y-2">
                           {filteredIndia.map((c, i) => (
                             <div key={`in-${i}`} className="p-3 rounded-lg border border-gray-200 hover:shadow-md transition-shadow bg-white">
-                              <div className="font-medium">{c.name} — {c.city}</div>
+                              <div className="font-medium text-gray-900">{c.name} — {c.city}</div>
                               <div className="text-sm text-gray-600">{c.note}</div>
                               <div className="mt-2 flex justify-end">
                                 <Button variant="outline" size="sm" onClick={() => setOpenMapKey((k) => k === `in-${i}` ? null : `in-${i}`)}>
@@ -465,7 +465,7 @@ const Dashboard = () => {
                         <div className="space-y-2">
                           {filteredInternational.map((c, i) => (
                             <div key={`out-${i}`} className="p-3 rounded-lg border border-gray-200 hover:shadow-md transition-shadow bg-white">
-                              <div className="font-medium">{c.name} — {c.country}</div>
+                              <div className="font-medium text-gray-900">{c.name} — {c.country}</div>
                               <div className="text-sm text-gray-600">{c.note}</div>
                               <div className="mt-2 flex justify-end">
                                 <Button variant="outline" size="sm" onClick={() => setOpenMapKey((k) => k === `out-${i}` ? null : `out-${i}`)}>
